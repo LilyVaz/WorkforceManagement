@@ -14,29 +14,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.WorkforceManagement.WorkforceManagement.dto.PersonaDTO;
+import com.WorkforceManagement.WorkforceManagement.model.Persona;
+import com.WorkforceManagement.WorkforceManagement.service.GenericService;
 import com.WorkforceManagement.WorkforceManagement.service.PersonaService;
 
 @RestController
 @RequestMapping("/api/personas")
-public class PersonaController{
+public class PersonaController extends GenericController<Persona, Integer>{
     
-    @Autowired
-    private PersonaService personaService;
+    private final PersonaService personaService;
 
-    @GetMapping
-    public List<PersonaDTO> listAll(){
-        return personaService.listAll();
+    public PersonaController(PersonaService personaService){
+        this.personaService=personaService;
     }
 
-    @GetMapping("/{idPersona}")
-    public ResponseEntity<PersonaDTO> findById(@PathVariable Integer idPersona){
-        PersonaDTO personaDTO=personaService.findById(idPersona);
-        return personaDTO!=null? ResponseEntity.ok(personaDTO): ResponseEntity.notFound().build();
-    }
-
-    @PostMapping
-    public PersonaDTO create(@RequestBody PersonaDTO personaDTO){
-        return personaService.save(personaDTO);
+    @Override
+    protected GenericService<Persona, Integer>getService(){
+        return personaService;
     }
 
     @PutMapping("/{idPersona}")
@@ -44,10 +38,4 @@ public class PersonaController{
         PersonaDTO updatePersona=personaService.update(idPersona, personaDTO);
         return updatePersona!= null?ResponseEntity.ok(updatePersona): ResponseEntity.notFound().build();
     }  
-
-    @DeleteMapping("/{idPersona}")
-    public ResponseEntity<Void> delete(@PathVariable Integer idPersona){
-        personaService.delete(idPersona);
-        return ResponseEntity.noContent().build();
-    }
 }
