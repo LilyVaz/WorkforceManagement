@@ -38,12 +38,16 @@ public class EntidadService extends GenericService<Entidad, Integer>{
         return entidadMapper.toDTO(saveEntidad);
     }
 
-    public EntidadDTO update(Integer idEntidad, EntidadDTO entidadDTO){
+    public EntidadDTO updateEntidad(Integer idEntidad, EntidadDTO entidadDTO){
         Entidad entidadUpdate=entidadRepository.findById(idEntidad)
             .orElseThrow(()-> new RuntimeException("No se encontro el registro"));
 
+        Rubro rubro= rubroRepository.findById(entidadDTO.getIdRubro())
+            .orElseThrow(()-> new RuntimeException("Rubro no encontrado"));
+
             entidadUpdate=entidadMapper.toEntity(entidadDTO);
             entidadUpdate.setIdEntidad(idEntidad);
+            entidadUpdate.setRubro(rubro);
 
             Entidad entidadSave=entidadRepository.save(entidadUpdate);
 
