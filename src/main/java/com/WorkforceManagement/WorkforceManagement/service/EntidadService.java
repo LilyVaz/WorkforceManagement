@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.WorkforceManagement.WorkforceManagement.dto.EntidadDTO;
 import com.WorkforceManagement.WorkforceManagement.mapper.EntidadMapper;
 import com.WorkforceManagement.WorkforceManagement.model.Entidad;
+import com.WorkforceManagement.WorkforceManagement.model.Rubro;
 import com.WorkforceManagement.WorkforceManagement.repository.EntidadRepository;
 import com.WorkforceManagement.WorkforceManagement.repository.RubroRepository;
 
@@ -23,6 +24,18 @@ public class EntidadService extends GenericService<Entidad, Integer>{
     @Override
     protected JpaRepository<Entidad, Integer>getRepository(){
         return entidadRepository;
+    }
+
+    public EntidadDTO saveEntidad(EntidadDTO entidadDTO){
+        Rubro rubro= rubroRepository.findById(entidadDTO.getIdRubro())
+        .orElseThrow(()-> new RuntimeException("Rubro no encontrado"));
+
+        Entidad entidad = entidadMapper.toEntity(entidadDTO);
+        entidad.setRubro(rubro);
+
+        Entidad saveEntidad= entidadRepository.save(entidad);
+
+        return entidadMapper.toDTO(saveEntidad);
     }
 
     public EntidadDTO update(Integer idEntidad, EntidadDTO entidadDTO){
