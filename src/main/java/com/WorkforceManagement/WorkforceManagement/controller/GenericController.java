@@ -22,7 +22,7 @@ public abstract class GenericController<T, ID> {
     public T findById(@PathVariable ID id){
         return getService().findById(id);
     }
-
+    
     @PostMapping
     public T save(@RequestBody T entity){
         return getService().save(entity);

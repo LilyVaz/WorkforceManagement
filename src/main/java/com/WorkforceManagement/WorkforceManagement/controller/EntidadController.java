@@ -2,6 +2,7 @@ package com.WorkforceManagement.WorkforceManagement.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,9 +28,15 @@ public class EntidadController extends GenericController<Entidad, Integer>{
         return entidadService;
     }
 
-    @PutMapping("/{idEntidad}")
+
+    @PostMapping("/create") // Endpoint diferente
+    public ResponseEntity<EntidadDTO> saveEntidad(@RequestBody EntidadDTO entidadDTO) {
+        return ResponseEntity.ok(entidadService.saveEntidad(entidadDTO));
+    }
+
+    @PutMapping("/update/{idEntidad}")
     public ResponseEntity<EntidadDTO>update(@PathVariable Integer idEntidad, @RequestBody EntidadDTO entidadDTO){
-        EntidadDTO updateEntidad= entidadService.update(idEntidad, entidadDTO);
+        EntidadDTO updateEntidad= entidadService.updateEntidad(idEntidad, entidadDTO);
         return updateEntidad!=null?ResponseEntity.ok(updateEntidad): ResponseEntity.notFound().build();
     }
 }
