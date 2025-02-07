@@ -21,19 +21,19 @@ public class Empleado {
 
     @ManyToOne
     @JoinColumn(name = "id_persona", nullable = false)
-    private Integer persona;
+    private Persona persona;
 
     private Integer codigoEmpleado;
 
     @ManyToOne
     @JoinColumn(name = "id_formapago", nullable = false)
-    private Integer formaPago;
+    private FormaPago formaPago;
 
     private Integer numIss;
 
     @ManyToOne
     @JoinColumn(name = "afp", nullable = false)
-    private Integer afp;
+    private Entidad afp;
 
     private Integer numNup;
 
