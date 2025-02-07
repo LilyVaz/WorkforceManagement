@@ -29,10 +29,11 @@ public class EntidadController extends GenericController<Entidad, Integer>{
     }
 
 
-    @PostMapping("/create") // Endpoint diferente
+    @PostMapping("/create")
     public ResponseEntity<EntidadDTO> saveEntidad(@RequestBody EntidadDTO entidadDTO) {
         return ResponseEntity.ok(entidadService.saveEntidad(entidadDTO));
     }
+
 
     @PutMapping("/update/{idEntidad}")
     public ResponseEntity<EntidadDTO>update(@PathVariable Integer idEntidad, @RequestBody EntidadDTO entidadDTO){

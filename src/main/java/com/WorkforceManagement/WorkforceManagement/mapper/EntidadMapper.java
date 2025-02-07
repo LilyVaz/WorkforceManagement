@@ -11,12 +11,12 @@ import com.WorkforceManagement.WorkforceManagement.model.Entidad;
 public interface EntidadMapper {
 
     @Mappings({
-        @Mapping(source = "rubro.idRubro", target = "idRubro")
+        @Mapping(source = "rubro.idRubro", target = "rubro")
     })
     EntidadDTO toDTO(Entidad entidad);
 
     @Mappings({
-        @Mapping(source = "idRubro", target = "rubro.idRubro")
+        @Mapping(source = "rubro", target = "rubro.idRubro")
     })
     Entidad toEntity(EntidadDTO entidadDTO);
 }

@@ -17,6 +17,7 @@ public class EntidadService extends GenericService<Entidad, Integer>{
     private EntidadRepository entidadRepository;
     @Autowired
     private RubroRepository rubroRepository;
+   
 
     @Autowired
     private EntidadMapper entidadMapper;
@@ -26,23 +27,28 @@ public class EntidadService extends GenericService<Entidad, Integer>{
         return entidadRepository;
     }
 
-    public EntidadDTO saveEntidad(EntidadDTO entidadDTO){
-        Rubro rubro= rubroRepository.findById(entidadDTO.getIdRubro())
-        .orElseThrow(()-> new RuntimeException("Rubro no encontrado"));
-
+    public EntidadDTO saveEntidad(EntidadDTO entidadDTO) {
+        if (entidadDTO.getRubro() == null) {
+            throw new RuntimeException("El campo idRubro es nulo. No se puede proceder.");
+        }
+    
+        Rubro rubro = rubroRepository.findById(entidadDTO.getRubro())
+            .orElseThrow(() -> new RuntimeException("Rubro no encontrado " + entidadDTO.getRubro()));
+    
         Entidad entidad = entidadMapper.toEntity(entidadDTO);
         entidad.setRubro(rubro);
-
-        Entidad saveEntidad= entidadRepository.save(entidad);
-
+    
+        Entidad saveEntidad = entidadRepository.save(entidad);
+    
         return entidadMapper.toDTO(saveEntidad);
     }
+    
 
     public EntidadDTO updateEntidad(Integer idEntidad, EntidadDTO entidadDTO){
         Entidad entidadUpdate=entidadRepository.findById(idEntidad)
             .orElseThrow(()-> new RuntimeException("No se encontro el registro"));
 
-        Rubro rubro= rubroRepository.findById(entidadDTO.getIdRubro())
+        Rubro rubro= rubroRepository.findById(entidadDTO.getRubro())
             .orElseThrow(()-> new RuntimeException("Rubro no encontrado"));
 
             entidadUpdate=entidadMapper.toEntity(entidadDTO);

@@ -6,5 +6,5 @@ import lombok.Data;
 public class EntidadDTO {
     private Integer idEntidad;
     private String entidad;
-    private Integer idRubro;
+    private Integer rubro;
 }
