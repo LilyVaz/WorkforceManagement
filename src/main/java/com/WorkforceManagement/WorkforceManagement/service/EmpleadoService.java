@@ -67,10 +67,14 @@ public class EmpleadoService extends GenericService<Empleado, Integer>{
             .orElseThrow(()-> new RuntimeException("Afp no encontrada"));
 
             empleadoUpdate=empleadoMapper.toEntity(empleadoDTO);
+            empleadoUpdate.setIdEmpleado(idEmpleado);
             empleadoUpdate.setPersona(persona);
             empleadoUpdate.setFormaPago(formaPago);
             empleadoUpdate.setAfp(afp);
-
+            empleadoUpdate.setCodigoEmpleado(empleadoDTO.getCodigoEmpleado());
+            empleadoUpdate.setNumIsss(empleadoDTO.getNumIsss());
+            empleadoUpdate.setNumNup(empleadoDTO.getNumNup());
+            
             Empleado empleadoSave=empleadoRepository.save(empleadoUpdate);
 
             return empleadoMapper.toDTO(empleadoSave);

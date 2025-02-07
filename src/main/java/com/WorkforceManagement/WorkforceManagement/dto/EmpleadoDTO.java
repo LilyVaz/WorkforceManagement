@@ -8,7 +8,7 @@ public class EmpleadoDTO {
     private Integer persona;
     private Integer codigoEmpleado;
     private Integer formaPago;
-    private Integer numIss;
+    private Integer numIsss;
     private Integer afp;
     private Integer numNup;
 

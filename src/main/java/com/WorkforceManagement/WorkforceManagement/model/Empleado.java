@@ -26,10 +26,10 @@ public class Empleado {
     private Integer codigoEmpleado;
 
     @ManyToOne
-    @JoinColumn(name = "id_formapago", nullable = false)
+    @JoinColumn(name = "id_forma_pago", nullable = false)
     private FormaPago formaPago;
 
-    private Integer numIss;
+    private Integer numIsss;
 
     @ManyToOne
     @JoinColumn(name = "afp", nullable = false)
