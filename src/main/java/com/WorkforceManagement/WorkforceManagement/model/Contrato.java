@@ -23,19 +23,19 @@ public class Contrato {
     
     @ManyToOne
     @JoinColumn(name = "id_empleado", nullable = false)
-    private Empleado idEmpleado;
+    private Empleado empleado;
 
     @ManyToOne
     @JoinColumn(name = "id_tipo_contrato", nullable = false)
-    private TipoContrato idTipoContrato;
+    private TipoContrato tipoContrato;
 
     @ManyToOne
     @JoinColumn(name = "id_empleado_cargo")
-    private EmpleadoCargo idEmpleadoCargo;
+    private EmpleadoCargo empleadoCargo;
 
     @ManyToOne
     @JoinColumn(name = "id_cat_departamento")
-    private CatDepartamento idCatDepartamento;
+    private CatDepartamento catDepartamento;
 
     private Date fechaInicio;
 

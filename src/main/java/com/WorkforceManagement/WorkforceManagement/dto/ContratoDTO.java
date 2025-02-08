@@ -5,10 +5,11 @@ import lombok.Data;
 
 @Data
 public class ContratoDTO {
-    private Integer idEmpleado;
-    private Integer idTipoContrato;
-    private Integer idEmpleadoCargo;
-    private Integer idCatDepartamento;
+    private Integer idContrato;
+    private Integer empleado;
+    private Integer tipoContrato;
+    private Integer empleadoCargo;
+    private Integer catDepartamento;
     private Date fechaInicio;
     private Double salario;
     private Date fechaFin;
