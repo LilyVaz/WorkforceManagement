@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.WorkforceManagement.WorkforceManagement.repository.CatDepartamentoRepository;
+import com.WorkforceManagement.WorkforceManagement.repository.EmpleadoCargoRepository;
+import com.WorkforceManagement.WorkforceManagement.repository.EmpleadoRepository;
+import com.WorkforceManagement.WorkforceManagement.repository.TipoContratoRepository;
 import com.WorkforceManagement.WorkforceManagement.service.GenericService;
 import com.WorkforceManagement.WorkforceManagement.service.util.RelationData;
 
@@ -31,15 +35,32 @@ public abstract class GenericController<T, ID> {
         return getService().save(entity);
     }
 
+    private EmpleadoRepository empleadoRepository;
+    private TipoContratoRepository tipoContratoRepository;
+    private EmpleadoCargoRepository empleadoCargoRepository;
+    private CatDepartamentoRepository catDepartamentoRepository;
     @PostMapping("/relations")
-    public T saveRelations(
+public T saveRelations(
         @RequestBody T entity,
-        @RequestParam Map<String, RelationData<?,?>>foreignKeys){
-            return getService().saveWithRelations(entity, foreignKeys);
-        }
+        @RequestParam Integer empleado,
+        @RequestParam Integer tipoContrato,
+        @RequestParam Integer empleadoCargo,
+        @RequestParam Integer catDepartamento) {
+
+    // Construir el mapa de relaciones manualmente
+    Map<String, RelationData<?, ?>> foreignKeys = Map.of(
+        "empleado", new RelationData<>(empleadoRepository, empleado),
+        "tipoContrato", new RelationData<>(tipoContratoRepository, tipoContrato),
+        "empleadoCargo", new RelationData<>(empleadoCargoRepository, empleadoCargo),
+        "catDepartamento", new RelationData<>(catDepartamentoRepository, catDepartamento)
+    );
+
+    return getService().saveWithRelations(entity, foreignKeys);
+}
+
 
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable ID id){
         getService().deleteById(id);
     }
-}
+} 
