@@ -1,5 +1,5 @@
 package com.WorkforceManagement.WorkforceManagement.controller;
-
+/*
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,13 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.WorkforceManagement.WorkforceManagement.dto.EmpleadoDTO;
+import com.WorkforceManagement.WorkforceManagement.mapper.GenericMapper;
 import com.WorkforceManagement.WorkforceManagement.model.Empleado;
 import com.WorkforceManagement.WorkforceManagement.service.EmpleadoService;
 import com.WorkforceManagement.WorkforceManagement.service.GenericService;
 
 @RestController
 @RequestMapping("/api/empleados")
-public class EmpleadoController extends GenericController<Empleado, Integer>{
+public class EmpleadoController extends GenericController<Empleado, Integer, EmpleadoDTO>{
     private final EmpleadoService empleadoService;
 
     public EmpleadoController(EmpleadoService empleadoService){
@@ -37,4 +38,22 @@ public class EmpleadoController extends GenericController<Empleado, Integer>{
         EmpleadoDTO updateEmpleado=empleadoService.updateEmpleado(idEmpleado, empleadoDTO);
         return updateEmpleado!=null?ResponseEntity.ok(updateEmpleado):ResponseEntity.notFound().build();
     }
-}
+
+    @Override
+    protected GenericMapper<Empleado, EmpleadoDTO> getMapper() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getMapper'");
+    }
+
+    @Override
+    protected EmpleadoDTO toDTO(Empleado entity) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'toDTO'");
+    }
+
+    @Override
+    protected Empleado toEntity(EmpleadoDTO dto) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'toEntity'");
+    }
+}*/

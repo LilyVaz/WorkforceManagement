@@ -8,7 +8,7 @@ import com.WorkforceManagement.WorkforceManagement.dto.ContratoDTO;
 import com.WorkforceManagement.WorkforceManagement.model.Contrato;
 
 @Mapper(componentModel = "spring")
-public interface ContratoMapper {
+public interface ContratoMapper extends GenericMapper<Contrato, ContratoDTO> {
     
     @Mappings({
         @Mapping(source = "empleado.idEmpleado", target = "empleado"),

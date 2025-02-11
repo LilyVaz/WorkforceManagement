@@ -1,21 +1,13 @@
 package com.WorkforceManagement.WorkforceManagement.service;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import com.WorkforceManagement.WorkforceManagement.dto.ContratoDTO;
-import com.WorkforceManagement.WorkforceManagement.dto.EntidadDTO;
-import com.WorkforceManagement.WorkforceManagement.mapper.ContratoMapper;
-import com.WorkforceManagement.WorkforceManagement.model.CatDepartamento;
 import com.WorkforceManagement.WorkforceManagement.model.Contrato;
-import com.WorkforceManagement.WorkforceManagement.model.Empleado;
-import com.WorkforceManagement.WorkforceManagement.model.EmpleadoCargo;
-import com.WorkforceManagement.WorkforceManagement.model.Entidad;
-import com.WorkforceManagement.WorkforceManagement.model.Rubro;
-import com.WorkforceManagement.WorkforceManagement.model.TipoContrato;
 import com.WorkforceManagement.WorkforceManagement.repository.CatDepartamentoRepository;
 import com.WorkforceManagement.WorkforceManagement.repository.ContratoRepository;
 import com.WorkforceManagement.WorkforceManagement.repository.EmpleadoCargoRepository;
@@ -35,15 +27,14 @@ public class ContratoService extends GenericService<Contrato, Integer>{
     private EmpleadoCargoRepository empleadoCargoRepository;
     @Autowired
     private CatDepartamentoRepository catDepartamentoRepository;
-    @Autowired
-    private ContratoMapper contratoMapper;
+  
 
     @Override
     protected JpaRepository<Contrato, Integer>getRepository(){
         return contratoRepository;
     }
 
-    public ContratoDTO saveContrato(ContratoDTO contratoDTO){
+    /*public ContratoDTO saveContrato(ContratoDTO contratoDTO){
         Empleado empleado=empleadoRepository.findById(contratoDTO.getEmpleado())
             .orElseThrow(()-> new RuntimeException("Empleado no encontrado"));
         
@@ -66,20 +57,6 @@ public class ContratoService extends GenericService<Contrato, Integer>{
 
         return contratoMapper.toDTO(saveContrato);
     }
-
-    /*public ContratoDTO saveContrato(ContratoDTO contratoDTO) {
-    Contrato contrato = contratoMapper.toEntity(contratoDTO);
-
-    Map<String, RelationData<?, ?>> foreignKeys = Map.of(
-        "empleado", new RelationData<>(empleadoRepository, contratoDTO.getEmpleado()),
-        "tipoContrato", new RelationData<>(tipoContratoRepository, contratoDTO.getTipoContrato()),
-        "empleadoCargo", new RelationData<>(empleadoCargoRepository, contratoDTO.getEmpleadoCargo()),
-        "catDepartamento", new RelationData<>(catDepartamentoRepository, contratoDTO.getCatDepartamento())
-    );
-
-    Contrato savedContrato = saveWithRelations(contrato, foreignKeys);
-    return contratoMapper.toDTO(savedContrato);
-    }*/
     public ContratoDTO updateContrato(Integer idContrato, ContratoDTO contratoDTO){
         Contrato contratoUpdate=contratoRepository.findById(idContrato)
             .orElseThrow(()-> new RuntimeException("No se encontro el contrato"));
@@ -109,5 +86,33 @@ public class ContratoService extends GenericService<Contrato, Integer>{
             Contrato contratoSave=contratoRepository.save(contratoUpdate);
 
             return contratoMapper.toDTO(contratoSave);
+    }*/
+    public Contrato saveContrato(Contrato contrato) {
+        Map<String, RelationData<?, ?>> foreignKeys = getRelationMap(contrato);
+        return saveWithRelations(contrato, foreignKeys, this::validateContrato);
+    }
+
+    //  🔵 Actualizar contrato con relaciones
+    public Contrato updateContrato(Integer id, Contrato contrato) {
+        Map<String, RelationData<?, ?>> foreignKeys = getRelationMap(contrato);
+        return updateWithRelations(id, contrato, foreignKeys, this::validateContrato);
+    }
+
+    // 🔍 Método para obtener relaciones del contrato
+    private Map<String, RelationData<?, ?>> getRelationMap(Contrato contrato) {
+        Map<String, RelationData<?, ?>> foreignKeys = new HashMap<>();
+        foreignKeys.put("empleado", new RelationData<>(empleadoRepository, contrato.getEmpleado().getIdEmpleado()));
+        foreignKeys.put("tipoContrato", new RelationData<>(tipoContratoRepository, contrato.getTipoContrato().getIdTipoContrato()));
+        foreignKeys.put("empleadoCargo", new RelationData<>(empleadoCargoRepository, contrato.getEmpleadoCargo().getIdEmpleadoCargo()));
+        foreignKeys.put("catDepartamento", new RelationData<>(catDepartamentoRepository, contrato.getCatDepartamento().getIdCatDepartamento()));
+        return foreignKeys;
+    }
+
+    // 🔍 Validaciones previas a guardar/actualizar
+    private Contrato validateContrato(Contrato contrato) {
+        if (contrato.getSalario() <= 0) {
+            throw new RuntimeException("El salario debe ser mayor a 0");
+        }
+        return contrato;
     }
 }

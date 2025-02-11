@@ -6,8 +6,6 @@ import com.WorkforceManagement.WorkforceManagement.dto.PersonaDTO;
 import com.WorkforceManagement.WorkforceManagement.model.Persona;
 
 @Mapper(componentModel = "spring")
-public interface PersonaMapper {
-    PersonaDTO tDto(Persona persona);
-    Persona toEntity(PersonaDTO personaDTO);
-
+public interface PersonaMapper extends GenericMapper<Persona, PersonaDTO>{
+    
 }

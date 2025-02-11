@@ -1,41 +1,80 @@
 package com.WorkforceManagement.WorkforceManagement.controller;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import com.WorkforceManagement.WorkforceManagement.dto.ContratoDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
 import com.WorkforceManagement.WorkforceManagement.model.Contrato;
+import com.WorkforceManagement.WorkforceManagement.repository.CatDepartamentoRepository;
+import com.WorkforceManagement.WorkforceManagement.repository.EmpleadoCargoRepository;
+import com.WorkforceManagement.WorkforceManagement.repository.EmpleadoRepository;
+import com.WorkforceManagement.WorkforceManagement.repository.TipoContratoRepository;
 import com.WorkforceManagement.WorkforceManagement.service.ContratoService;
-import com.WorkforceManagement.WorkforceManagement.service.GenericService;
+import com.WorkforceManagement.WorkforceManagement.service.util.RelationData;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/contratos")
+@RequestMapping("/contratos")
 public class ContratoController extends GenericController<Contrato, Integer> {
-    private final ContratoService contratoService;
 
-    public ContratoController (ContratoService contratoService){
-        this.contratoService=contratoService;
+    @Autowired
+    private EmpleadoRepository empleadoRepository;
+    @Autowired
+    private TipoContratoRepository tipoContratoRepository;
+    @Autowired
+    private EmpleadoCargoRepository empleadoCargoRepository;
+    @Autowired
+    private CatDepartamentoRepository catDepartamentoRepository;
+
+    public ContratoController(ContratoService service) {
+        super(service);
     }
 
     @Override
-    protected GenericService<Contrato, Integer>getService(){
-        return contratoService;
-    }
+    protected Map<String, RelationData<?, ?>> mapToRelationData(Map<String, Object> foreignKeys) {
+        Map<String, RelationData<?, ?>> relationDataMap = new HashMap<>();
 
-    @PostMapping("/create")
-    public ResponseEntity<ContratoDTO> saveContrato(@RequestBody ContratoDTO contratoDTO){
-        return ResponseEntity.ok(contratoService.saveContrato(contratoDTO));
-    }
-    
-    @PutMapping("/update/{idContrato}")
-    public ResponseEntity<ContratoDTO>update(@PathVariable Integer idContrato, @RequestBody ContratoDTO contratoDTO){
-        ContratoDTO updateContrato=contratoService.updateContrato(idContrato, contratoDTO);
-        return updateContrato!=null?ResponseEntity.ok(updateContrato): ResponseEntity.notFound().build();
+        if (foreignKeys.containsKey("empleadoId")) {
+            relationDataMap.put("empleado", new RelationData<>(empleadoRepository, Integer.parseInt(foreignKeys.get("empleadoId").toString())));
+        }
+        if (foreignKeys.containsKey("tipoContratoId")) {
+            relationDataMap.put("tipoContrato", new RelationData<>(tipoContratoRepository, Integer.parseInt(foreignKeys.get("tipoContratoId").toString())));
+        }
+        if (foreignKeys.containsKey("empleadoCargoId")) {
+            relationDataMap.put("empleadoCargo", new RelationData<>(empleadoCargoRepository, Integer.parseInt(foreignKeys.get("empleadoCargoId").toString())));
+        }
+        if (foreignKeys.containsKey("catDepartamentoId")) {
+            relationDataMap.put("catDepartamento", new RelationData<>(catDepartamentoRepository, Integer.parseInt(foreignKeys.get("catDepartamentoId").toString())));
+        }
 
+        return relationDataMap;
     }
 }
+
+/* 
+    @PostMapping("/create")
+public ResponseEntity<ContratoDTO> saveContrato(@RequestBody ContratoDTO contratoDTO) {
+    return ResponseEntity.ok(contratoService.saveContrato(contratoDTO));
+}
+
+@PutMapping("/update/{idContrato}")
+public ResponseEntity<ContratoDTO> updateContrato(
+        @PathVariable Integer idContrato,
+        @RequestBody ContratoDTO contratoDTO) {
+    return ResponseEntity.ok(contratoService.updateContrato(idContrato, contratoDTO));
+}
+
+@Override
+protected ContratoDTO toDTO(Contrato entity) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'toDTO'");
+}
+
+@Override
+protected Contrato toEntity(ContratoDTO dto) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'toEntity'");
+}
+*/
