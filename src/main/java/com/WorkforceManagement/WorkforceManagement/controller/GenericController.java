@@ -52,5 +52,11 @@ public abstract class GenericController<T, DTO, ID> {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+    protected T preSaveValidation(T entity) {
+        return entity;  // Puede ser sobreescrito en controladores específicos
+    }
 
+    protected T preUpdateValidation(T entity) {
+        return entity;  // Puede ser sobreescrito en controladores específicos
+    }
 }
