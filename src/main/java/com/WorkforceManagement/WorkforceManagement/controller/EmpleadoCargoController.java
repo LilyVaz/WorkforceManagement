@@ -1,5 +1,5 @@
 package com.WorkforceManagement.WorkforceManagement.controller;
-
+/*
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,3 +23,4 @@ public class EmpleadoCargoController extends GenericController<EmpleadoCargo, In
         return new HashMap<>(); // No hay relaciones, por lo que devolvemos un mapa vacío.
     }
 }
+*/

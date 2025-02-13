@@ -1,5 +1,5 @@
 package com.WorkforceManagement.WorkforceManagement.service;
-
+/*
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,7 +87,7 @@ public class ContratoService extends GenericService<Contrato, Integer>{
 
             return contratoMapper.toDTO(contratoSave);
     }*/
-    public Contrato saveContrato(Contrato contrato) {
+   /* public Contrato saveContrato(Contrato contrato) {
         Map<String, RelationData<?, ?>> foreignKeys = getRelationMap(contrato);
         return saveWithRelations(contrato, foreignKeys, this::validateContrato);
     }
@@ -115,4 +115,4 @@ public class ContratoService extends GenericService<Contrato, Integer>{
         }
         return contrato;
     }
-}
+} */

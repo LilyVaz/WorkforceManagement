@@ -18,4 +18,11 @@ public class RelationData<R, ID> {
     public ID getId() {
         return id;
     }
+
+
+    // 🔥 Nuevo método para obtener la entidad relacionada desde el repositorio
+    public R getRelatedEntity() {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No se encontró la entidad con ID: " + id));
+    }
 }

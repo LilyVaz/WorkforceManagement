@@ -1,6 +1,6 @@
 package com.WorkforceManagement.WorkforceManagement.service;
 
-
+/*/
 import org.springframework.stereotype.Service;
 
 import com.WorkforceManagement.WorkforceManagement.dto.PersonaDTO;
@@ -17,4 +17,4 @@ public class PersonaService extends GenericService<Persona, PersonaDTO, Integer>
     }
 
 
-}
+}*/

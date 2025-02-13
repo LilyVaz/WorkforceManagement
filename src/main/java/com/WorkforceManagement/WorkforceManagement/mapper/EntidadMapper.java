@@ -8,7 +8,7 @@ import com.WorkforceManagement.WorkforceManagement.dto.EntidadDTO;
 import com.WorkforceManagement.WorkforceManagement.model.Entidad;
 
 @Mapper(componentModel = "spring")
-public interface EntidadMapper {
+public interface EntidadMapper extends GenericMapper<Entidad, EntidadDTO>{
 
     @Mappings({
         @Mapping(source = "rubro.idRubro", target = "rubro")

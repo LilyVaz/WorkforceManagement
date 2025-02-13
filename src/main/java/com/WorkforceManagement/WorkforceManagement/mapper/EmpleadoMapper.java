@@ -8,7 +8,7 @@ import com.WorkforceManagement.WorkforceManagement.dto.EmpleadoDTO;
 import com.WorkforceManagement.WorkforceManagement.model.Empleado;
 
 @Mapper(componentModel = "spring")
-public interface EmpleadoMapper {
+public interface EmpleadoMapper extends GenericMapper<Empleado, EmpleadoDTO>{
     
    
     @Mappings({

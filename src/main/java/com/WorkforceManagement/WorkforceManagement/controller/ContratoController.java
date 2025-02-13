@@ -1,6 +1,6 @@
 package com.WorkforceManagement.WorkforceManagement.controller;
 
-
+/*
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,7 +51,7 @@ public class ContratoController extends GenericController<Contrato, Integer> {
 
         return relationDataMap;
     }
-}
+}*/
 
 /* 
     @PostMapping("/create")
@@ -66,15 +66,5 @@ public ResponseEntity<ContratoDTO> updateContrato(
     return ResponseEntity.ok(contratoService.updateContrato(idContrato, contratoDTO));
 }
 
-@Override
-protected ContratoDTO toDTO(Contrato entity) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'toDTO'");
-}
 
-@Override
-protected Contrato toEntity(ContratoDTO dto) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'toEntity'");
-}
 */

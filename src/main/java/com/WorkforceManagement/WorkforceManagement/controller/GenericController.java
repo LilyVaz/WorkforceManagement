@@ -1,84 +1,56 @@
 package com.WorkforceManagement.WorkforceManagement.controller;
-
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import com.WorkforceManagement.WorkforceManagement.service.GenericService;
-import com.WorkforceManagement.WorkforceManagement.service.util.RelationData;
-
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 
-public abstract class GenericController<T, ID> {
-
-    protected final GenericService<T, ID> service;
-
-    public GenericController(GenericService<T, ID> service) {
+public abstract class GenericController<T, DTO, ID> {
+    protected final GenericService<T, DTO, ID> service;
+    public GenericController(GenericService<T, DTO, ID> service) {
         this.service = service;
     }
 
-    // 1️⃣ Obtener todos los registros
     @GetMapping
-    public ResponseEntity<List<T>> listAll() {
-        return ResponseEntity.ok(service.findAll());
+    public ResponseEntity<List<DTO>> listAll() {
+        return ResponseEntity.ok(service.listAll());
     }
 
-    // 2️⃣ Obtener un registro por ID
     @GetMapping("/{id}")
-    public ResponseEntity<T> findById(@PathVariable ID id) {
-        return ResponseEntity.ok(service.findById(id));
+    public ResponseEntity<?> findById(@PathVariable ID id) {
+        try {
+            return ResponseEntity.ok(service.findById(id));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
-    // 3️⃣ Guardar nuevo registro sin relaciones
     @PostMapping
-    public ResponseEntity<T> save(@RequestBody T entity) {
-        return ResponseEntity.ok(service.save(entity));
+    public ResponseEntity<?> save(@RequestBody DTO dto) {
+        try {
+            return ResponseEntity.ok(service.save(dto));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
-    // 4️⃣ Actualizar un registro existente sin relaciones
     @PutMapping("/{id}")
-    public ResponseEntity<T> update(@PathVariable ID id, @RequestBody T entity) {
-        return ResponseEntity.ok(service.update(id, entity));
+    public ResponseEntity<?> update(@PathVariable ID id, @RequestBody DTO dto) {
+        try {
+            return ResponseEntity.ok(service.update(id, dto));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
-    // 5️⃣ Eliminar un registro
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable ID id) {
-        service.deleteById(id);
+    public ResponseEntity<?> delete(@PathVariable ID id) {
+        try {
+            service.delete(id);
         return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
-    // 6️⃣ Guardar una entidad con relaciones
-    @PostMapping("/save-with-relations")
-    public ResponseEntity<T> saveWithRelations(
-            @RequestBody T entity,
-            @RequestParam Map<String, Object> foreignKeys) {
-
-        Map<String, RelationData<?, ?>> relationDataMap = mapToRelationData(foreignKeys);
-        Function<T, T> preSaveOrUpdate = this::preSaveValidation;
-
-        return ResponseEntity.ok(service.saveWithRelations(entity, relationDataMap, preSaveOrUpdate));
-    }
-
-    // 7️⃣ 🔥 **Actualizar una entidad con relaciones**
-    @PutMapping("/update-with-relations/{id}")
-    public ResponseEntity<T> updateWithRelations(
-            @PathVariable ID id,
-            @RequestBody T entity,
-            @RequestParam Map<String, Object> foreignKeys) {
-
-        Map<String, RelationData<?, ?>> relationDataMap = mapToRelationData(foreignKeys);
-        Function<T, T> preSaveOrUpdate = this::preSaveValidation;
-
-        return ResponseEntity.ok(service.updateWithRelations(id, entity, relationDataMap, preSaveOrUpdate));
-    }
-
-    // 🔍 Método abstracto para convertir `foreignKeys` en `RelationData`
-    protected abstract Map<String, RelationData<?, ?>> mapToRelationData(Map<String, Object> foreignKeys);
-
-    // 🔍 Método para validaciones antes de guardar/actualizar (puede ser sobrescrito)
-    protected T preSaveValidation(T entity) {
-        return entity; // Por defecto, no hace nada (puede ser personalizado en subclases)
-    }
 }
